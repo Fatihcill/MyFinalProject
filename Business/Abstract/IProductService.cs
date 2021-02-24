@@ -18,5 +18,8 @@ namespace Business.Abstract
         IDataResult<List<ProductDetailDto>> GetProductDetail();
 
         IResult Add(Product product);
+        IResult Update(Product product);
+
+        //RESTFUL ---> HTTP --->
     }
 }
