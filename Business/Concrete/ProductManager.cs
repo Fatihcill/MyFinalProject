@@ -4,7 +4,9 @@ using DataAccess.Concrete.InMemory;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using Business.BusinessAspects.Autofac;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Validation;
@@ -13,7 +15,6 @@ using Core.Utilities.Business;
 using Core.Utilities.Results;
 using Entities.DTOs;
 using FluentValidation;
-using Microsoft.EntityFrameworkCore.Internal;
 
 namespace Business.Concrete
 {
@@ -56,7 +57,9 @@ namespace Business.Concrete
             }
             return new SuccessDataResult<List<ProductDetailDto>>(_productDal.GetProductDetail());
         }
+        
 
+        [SecuredOperation("product.add")]
         [ValidationAspect(typeof(ProductValidator))]
         public IResult Add(Product product)
         {
@@ -68,8 +71,7 @@ namespace Business.Concrete
                 return result;
             }
             _productDal.Add(product);
-            return new SucessResult(Messages.ProductAdded);
-
+            return new SuccessResult(Messages.ProductAdded);
         }
 
         [ValidationAspect(typeof(ProductValidator))]
@@ -83,14 +85,13 @@ namespace Business.Concrete
                 return result;
             }
             _productDal.Update(product);
-            return new SucessResult(Messages.ProductAdded);
+            return new SuccessResult(Messages.ProductAdded);
         }
 
         public IDataResult<Product> GetById(int productId)
         {
             return new SuccessDataResult<Product>(_productDal.Get(p => p.ProductId == productId));
         }
-
 
 
 
@@ -102,7 +103,7 @@ namespace Business.Concrete
             {
                 return new ErrorResult(Messages.CategoryLimitExceded);
             }
-            return new SucessResult();
+            return new SuccessResult();
         }
         private IResult CheckIfProductCountOfCategoryCorrect(int categoryId)
         {
@@ -112,9 +113,8 @@ namespace Business.Concrete
             {
                 return new ErrorResult(Messages.ProductCountOfCategoryError);
             }
-            return new SucessResult();
+            return new SuccessResult();
         }
-
         private IResult CheckIfProductNameExists(string productName)
         {
             var result = _productDal.GetAll(p => p.ProductName == productName).Any();
@@ -122,7 +122,7 @@ namespace Business.Concrete
             {
                 return new ErrorResult(Messages.ProductNameAlreadyExists);
             }
-            return new SucessResult();
+            return new SuccessResult();
         }
 
     }

@@ -1,13 +1,13 @@
 ﻿namespace Core.Utilities.Results
 {
-    public class SucessResult:Result
+    public class SuccessResult:Result
     {
-        public SucessResult(string message) : base(true, message)
+        public SuccessResult(string message) : base(true, message)
         {
 
         }
 
-        public SucessResult() : base(true)
+        public SuccessResult() : base(true)
         {
         }
     }
